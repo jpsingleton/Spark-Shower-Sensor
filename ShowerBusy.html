@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Is the shower room free&#8253;</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Georgia, sans-serif;
+        }
+
+        h2 {
+            font-weight: bold;
+            font-size: 120pt;
+            line-height: 120pt;
+            padding: 10px;
+            margin: 30px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="shortanswer">...</h2>
+    <h3 id="longanswer">&nbsp;</h3>
+    <p id="timestamp">&nbsp;</p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script type="text/javascript">
+        var url = "https://api.spark.io/v1/devices/< DEVICE ID GOES HERE >/";
+        var token = "?access_token=< OAUTH2 ACCESS TOKEN GOES HERE >";
+        $.get(url + "showerbusy" + token, function (data) {
+            updateUI(data.result, data.coreInfo.last_heard);
+            var eventSource = new EventSource(url + "events/shower" + token);
+            eventSource.addEventListener('shower', function (event) {
+                var result = JSON.parse(event.data);
+                updateUI(result.data === "busy", result.published_at);
+            }, false);
+        });
+        function updateUI(busy, time) {
+            var datetime = new Date(time);
+            $("#timestamp").html(datetime);
+            if (busy) {
+                $("#shortanswer").html("No");
+                $("#longanswer").html("The shower room is NOT currently free :(");
+                document.title = "Shower busy :("
+            } else {
+                $("#shortanswer").html("Yes!");
+                $("#longanswer").html("The shower room is currently free!");
+                document.title = "Shower free :)"
+            }
+        }
+    </script>
+</body>
+</html>
