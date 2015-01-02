@@ -3,7 +3,7 @@ Spark Core Shower Room Door Sensor
 
 ### Using a spark core to push shower room occupancy status to a web page. ###
 
-Full writeup here: http://unop.co.uk/hardware/spark-core-shower-room-door-sensor/
+Full writeup here: https://unop.uk/dev/spark-core-shower-room-door-sensor/
 
 To get up and running: 
 - flash the firmware to the spark 
